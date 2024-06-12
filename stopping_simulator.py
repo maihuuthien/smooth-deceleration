@@ -5,18 +5,15 @@ import numpy as np
 
 class StoppingSimulator:
     def __init__(self):
-        self.EGO_FRONT_LENGTH = 1.5  # ego car front length [m]
         self.SAFETY_DIST = 1.0  # safety distance [m]
-        self.D_S_S = 1.0  # distance sampling length [m]
+        self.D_S_S = 0.5  # distance sampling length [m]
         self.N_S_SAMPLE = 2  # sampling number of distance
-        self.DT = 0.2  # time sampling length [s]
+        self.DT = 0.1  # time sampling length [s]
         self.MAX_T = 3.0  # max prediction time [s]
-        self.MIN_T = 1.0  # min prediction time [s]
+        self.MIN_T = 0.5  # min prediction time [s]
 
     def run(self, ego_speed, ego_accel, obstacle_distance):
-        target_s = obstacle_distance \
-            - self.SAFETY_DIST \
-            - self.EGO_FRONT_LENGTH  # to account for ego front length, skip this if obstacle_distance is distance from camera
+        target_s = obstacle_distance - self.SAFETY_DIST
 
         t = None
         s = None
