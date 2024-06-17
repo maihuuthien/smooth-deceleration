@@ -1,5 +1,6 @@
 from stopping_simulator import StoppingSimulator
 from quintic_polynomials_planner import plot_arrow
+from utils.stopwatch import Stopwatch
 
 import matplotlib.pyplot as plt
 import numpy as np
@@ -21,10 +22,12 @@ def main():
     yaw = np.arctan2(gy - sy, gx - sx)
 
     stop_sim = StoppingSimulator()
-    time, s, s_d, s_dd, s_ddd = stop_sim.run(
-        ego_speed=sv, ego_accel=sa,
-        obstacle_distance=np.hypot(gx - sx, gy - sy)
-    )
+
+    with Stopwatch("Stopping Simulation"):
+        time, s, s_d, s_dd, s_ddd, lon_qp = stop_sim.run(
+            ego_speed=sv, ego_accel=sa,
+            obstacle_distance=np.hypot(gx - sx, gy - sy)
+        )
 
     if show_animation:  # pragma: no cover
         x = [sx + si*np.cos(yaw) for si in s]

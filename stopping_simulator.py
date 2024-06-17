@@ -20,6 +20,7 @@ class StoppingSimulator:
         s_d = None
         s_dd = None
         s_ddd = None
+        best_qp = None
 
         min_ddd = float('inf')  # min jerk
         for Ti in np.arange(
@@ -37,10 +38,11 @@ class StoppingSimulator:
                 ddd = lon_qp.calc_third_derivative(0.)  # we only need to check the instant jerk, i.e. the moment we start braking
                 if min_ddd > ddd:
                     min_ddd = ddd  # found the better longitudinal path
+                    best_qp = lon_qp
                     t = [ti for ti in np.arange(0.0, Ti, self.DT)]  # list of time points
                     s = [lon_qp.calc_point(ti) for ti in t]  # list of positions, i.e. distances
                     s_d = [lon_qp.calc_first_derivative(ti) for ti in t]  # list of speeds
                     s_dd = [lon_qp.calc_second_derivative(ti) for ti in t]  # list of accelerations
                     s_ddd = [lon_qp.calc_third_derivative(ti) for ti in t]  # list of jerks
 
-        return t, s, s_d, s_dd, s_ddd
+        return t, s, s_d, s_dd, s_ddd, best_qp
